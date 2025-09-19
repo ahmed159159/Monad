@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Battle Cards</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🃏 Battle Cards</h1>
+    <p class="sub">اختَر كارتك، اختَر الخاصية، تحدّى العدو!</p>
+  </header>
+
+  <main>
+    <section id="cardsArea" class="cards-grid"></section>
+
+    <section id="battlePanel" class="panel hidden">
+      <div class="playerBox">
+        <h3>انت</h3>
+        <div id="playerCard" class="card large"></div>
+        <div class="attrs">
+          <button class="attrBtn" data-attr="power">قوة</button>
+          <button class="attrBtn" data-attr="speed">سرعة</button>
+          <button class="attrBtn" data-attr="defense">دفاع</button>
+        </div>
+      </div>
+
+      <div class="vsBox">
+        <div class="vsText">VS</div>
+        <div id="result" class="result">اختَر كارت و اضغط خاصية</div>
+        <button id="nextRound" class="small hidden">جولة تانية</button>
+      </div>
+
+      <div class="opponentBox">
+        <h3>الخصم</h3>
+        <div id="opponentCard" class="card large"></div>
+      </div>
+    </section>
+
+    <section class="scoreboard">
+      <div>نقاطك: <span id="playerScore">0</span></div>
+      <div>نقاط الخصم: <span id="opponentScore">0</span></div>
+    </section>
+  </main>
+
+  <footer>
+    استبدل الصور في فولدر <code>/images</code> بالأسماء المذكورة. ثم رفع المشروع على GitHub → Vercel.
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
