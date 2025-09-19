@@ -1,11 +1,11 @@
-// بيانات الكروت: استبدل أسماء الصور داخل /images حسب صورك
+// بيانات الكروت: الصور موجودة في نفس فولدر index.html
 const cards = [
-  { id:1, name:"Fighter 1", img:"images/char1.jpg", power: 80, speed: 60, defense: 70 },
-  { id:2, name:"Fighter 2", img:"images/char2.jpg", power: 75, speed: 85, defense: 65 },
-  { id:3, name:"Fighter 3", img:"images/char3.jpg", power: 66, speed: 72, defense: 88 },
-  { id:4, name:"Fighter 4", img:"images/char4.jpg", power: 90, speed: 54, defense: 60 },
-  { id:5, name:"Fighter 5", img:"images/char5.jpg", power: 58, speed: 93, defense: 55 },
-  { id:6, name:"Fighter 6", img:"images/char6.jpg", power: 70, speed: 70, defense: 70 }
+  { id:1, name:"Fighter 1", img:"char1.jpg", power: 80, speed: 60, defense: 70 },
+  { id:2, name:"Fighter 2", img:"char2.jpg", power: 75, speed: 85, defense: 65 },
+  { id:3, name:"Fighter 3", img:"char3.jpg", power: 66, speed: 72, defense: 88 },
+  { id:4, name:"Fighter 4", img:"char4.jpg", power: 90, speed: 54, defense: 60 },
+  { id:5, name:"Fighter 5", img:"char5.jpg", power: 58, speed: 93, defense: 55 },
+  { id:6, name:"Fighter 6", img:"char6.jpg", power: 70, speed: 70, defense: 70 }
 ];
 
 const cardsArea = document.getElementById("cardsArea");
@@ -45,34 +45,37 @@ function renderCards() {
 // عندما يختار اللاعب كارت
 function selectPlayerCard(card) {
   playerSelection = card;
-  // خصم عشوائي لاختيار المنافس (يمكن تغييره ليوزع عشوائياً من الباقي)
+  // خصم عشوائي لاختيار المنافس
   const pool = cards.filter(c => c.id !== card.id);
   opponentSelection = pool[Math.floor(Math.random()*pool.length)];
 
   showBattlePanel();
   renderCardDiv(playerCardDiv, playerSelection);
-  renderCardDiv(opponentCardDiv, opponentSelection);
+  renderCardDiv(opponentCardDiv, opponentSelection, true);
   resultDiv.textContent = "اختَر الخاصية للمقارنة (قوة / سرعة / دفاع)";
   nextRoundBtn.classList.add("hidden");
 }
 
 // عرض الكارت في الصندوق الكبير
-function renderCardDiv(container, card) {
+// إذا hiddenOpponent = true، يظهر صورة مغلقة للخصم
+function renderCardDiv(container, card, hiddenOpponent = false) {
+  const imgSrc = hiddenOpponent ? "back.jpg" : card.img;
+  const nameText = hiddenOpponent ? "??" : card.name;
+  const statsText = hiddenOpponent ? "" : `
+    <div>⚔️ ${card.power}</div>
+    <div>💨 ${card.speed}</div>
+    <div>🛡️ ${card.defense}</div>
+  `;
   container.innerHTML = `
-    <img src="${card.img}" alt="${card.name}" onerror="this.style.filter='grayscale(100%)'; this.alt='Image not found'">
-    <div class="meta">${card.name}</div>
-    <div class="stats">
-      <div>⚔️ ${card.power}</div>
-      <div>💨 ${card.speed}</div>
-      <div>🛡️ ${card.defense}</div>
-    </div>
+    <img src="${imgSrc}" alt="${nameText}" onerror="this.style.filter='grayscale(100%)'; this.alt='Image not found'">
+    <div class="meta">${nameText}</div>
+    <div class="stats">${statsText}</div>
   `;
 }
 
 // إظهار لوحة القتال
 function showBattlePanel() {
   battlePanel.classList.remove("hidden");
-  // تمرير لنصبة المركز
   window.scrollTo({ top: battlePanel.offsetTop - 20, behavior: 'smooth' });
 }
 
@@ -82,8 +85,9 @@ function playAttribute(attr) {
   const p = playerSelection[attr];
   const o = opponentSelection[attr];
 
-  // مؤثر بصري بسيط
-  resultDiv.innerHTML = `أنت: ${p} — الخصم: ${o}`;
+  // كشف صورة الخصم كاملة عند الضغط
+  renderCardDiv(opponentCardDiv, opponentSelection, false);
+
   if (p > o) {
     resultDiv.innerHTML = `🔥 فزت! (${playerSelection.name} ${attr} ${p} > ${o})`;
     playerScore++;
